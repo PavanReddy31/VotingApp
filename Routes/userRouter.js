@@ -75,7 +75,7 @@ router.put('/profile/changePassword',jwtMiddleware,async (req,res)=>{
     try{
         const userId = req.user; // since we already logged we are using the same userId
 
-        const user = await user.findById(userId); // get the user details
+        const user = await user.findById(userId.id); // get the user details
 
         const {currentPassword,newPassword} = req.body; //current password should be entered because he already logged 
 
