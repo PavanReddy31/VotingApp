@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
         require:true
     },
     pincode:{
-        type:String,
+        type:Number,
         require:true
     },
     password:{
@@ -45,18 +45,22 @@ const userSchema = new mongoose.Schema({
         default:'voter'
     },
     voteStatus:{
-        type:boolean,
+        type:Boolean,
         default:false
     }
 });
 
 userSchema.pre('save',async function(next){
     const user = this;
+
     if(!user.isModified('password'))
         return next();
+
     try{
         const salt = await bcrypt.genSalt(10);
+
         const hashedPassword = await bcrypt.hash(user.password, salt);
+
         user.password = hashedPassword;
         next();
     }catch(err){
@@ -66,6 +70,8 @@ userSchema.pre('save',async function(next){
 
 userSchema.methods.comparePasswords = async function(givenPassword){
     try{
+        console.log('Given Password:', givenPassword);  // Log the password provided by the user
+        console.log('Stored Password:', this.password); 
         const isMatch = await bcrypt.compare(givenPassword,this.password);
         return isMatch;
     }catch(err){
@@ -74,6 +80,6 @@ userSchema.methods.comparePasswords = async function(givenPassword){
 }
 
 
-const model = mongoose.model('model',userSchema);
-module.exports = model;
+const userModel = mongoose.model('userModel',userSchema);
+module.exports = userModel;
 

@@ -28,5 +28,5 @@ const candSchema = new mongoose.Schema({
     }
 });
 
-const model = mongoose.model('model',candSchema);
-module.exports = model;
+const candidateModel = mongoose.model('candidateModel',candSchema);
+module.exports = candidateModel;
